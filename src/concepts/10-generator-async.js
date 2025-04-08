@@ -10,11 +10,16 @@ import { heroes } from "../data/heroes"
 export const generatorAsyncComponent = async( element ) =>{
 
         const heroGenerator = getHeroGenerator();
+        let isFinished = false;
         do{
+            const {value, done} = await heroGenerator.next();
+            isFinished = done
 
-        }while( (await heroGenerator.next()).done ){
+            if(isFinished ) break;
 
-        }
+            element.innerHTML = value;
+
+        }while(!isFinished)
 }
 
 async function* getHeroGenerator() {
@@ -23,6 +28,7 @@ async function* getHeroGenerator() {
         await sleep();
         yield hero.name;
     }
+    return 'No hay más';
 }
 
 
